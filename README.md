@@ -127,10 +127,10 @@ Use this command in the same folder as:
 
 - `QuickUserlistExport.py`
 - `QUE Readme.md`
-- `youricon.ico`
+- `QUEicon.ico`
 
 ```bash
-pyinstaller --noconfirm --clean --onefile --windowed --icon="youricon.ico" --name="QuickUserlistExport" --add-data="QUE Readme.md;." QuickUserlistExport.py
+pyinstaller --noconfirm --clean --onefile --windowed --icon="QUEicon.ico" --name="QuickUserlistExport" --add-data="QUE Readme.md;." QuickUserlistExport.py
 ```
 
 When the EXE runs for the first time, it writes `QUE Readme.md` next to the EXE automatically.
