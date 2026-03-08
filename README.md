@@ -1,24 +1,19 @@
-# QuickUserlistExport
+QuickUserlistExport is a local utility that exports the member list of a Discord server to an Excel `.xlsx` file using a bot that you create and install in your own server.
 
-QuickUserlistExport is a local utility that exports the member list of a Discord server to a CSV file using a bot that you create and install in your own server.
-
-This tool runs locally on your computer. It does not store data remotely and does not require any hosted service.
+This tool runs locally on your computer. It does not use a hosted service, and it does not require slash commands or bot interaction inside Discord after setup.
 
 ---
 
-# 2-Minute Quick Setup
+Quick Setup
 
-If you just want the shortest possible setup path, do this:
-
-1. Go to the Discord Developer Portal:
-   https://discord.com/developers/applications
+1. Go to the Discord Developer Portal:  
+   `https://discord.com/developers/applications`
 2. Create a new application.
-3. Open **Installation** and enable:
-   - `Guild Install`
-   - `Discord Provided Link`
-   - `applications.commands`
-   - `bot`
-   - Bot Permission: `Administrator`
+3. Open **Installation** and set:
+   - **Guild Install** enabled
+   - **Discord Provided Link**
+   - scopes: `applications.commands` and `bot`
+   - bot permission: `Administrator`
 4. Open **Bot** and:
    - create the bot if needed
    - leave **Public Bot** on if Discord requires it to save
@@ -31,7 +26,7 @@ If you just want the shortest possible setup path, do this:
    - Bot Token
    - Server ID
    - Save Folder
-10. Click **Validate**
+10. Click **Validate Bot Access**
 11. Export either:
    - the full member list, or
    - a role-specific list
@@ -44,17 +39,26 @@ If anything fails, read the troubleshooting section below.
 
 QuickUserlistExport allows you to:
 
-- Export all server members to a CSV file
-- Export members belonging to a specific role
-- Automatically paginate large servers
-- Automatically name the export file using the server’s public name
+- Export **all non-bot server members** to an Excel workbook
+- Export members belonging to a **specific role**
+- Works for servers over 1000 (there is theoretically no limit)
+- DARK MODE IS DEFAULT!!! as is only proper, moral, correct, and good.
+- Save preferences such as the server ID, save folder, dark mode, and optionally the bot token
 
-Example export names:
+# Exported Columns
 
-- `MyServer_memberlist.csv`
-- `MyServer_Moderatorlist.csv`
+The spreadsheet exports these columns:
 
----
+- `user_id`
+- `username`
+- `display_name`
+- `joined_at`
+- `highest_role`
+
+Additional export behavior:
+
+- **Bot accounts are skipped**
+- If a user has a non-zero discriminator, the username is exported as `username#1234`---
 
 # Requirements
 
@@ -75,14 +79,14 @@ You will perform these steps:
 
 1. Create a Discord Application
 2. Create a Bot inside that application
-3. Enable the Server Members Intent
+3. Enable the **Server Members Intent**
 4. Generate an install link
 5. Install the bot into your server
 6. Copy the bot token
 7. Copy the server ID
 8. Enter both into QuickUserlistExport
 
-The entire setup typically takes 3–5 minutes.
+The entire setup typically takes **3–5 minutes**.
 
 ---
 
@@ -90,7 +94,7 @@ The entire setup typically takes 3–5 minutes.
 
 Go to:
 
-https://discord.com/developers/applications
+`https://discord.com/developers/applications`
 
 Click:
 
@@ -137,7 +141,7 @@ Set permissions to:
 
 `Administrator`
 
-This is the easiest option for internal tools.
+This is the simplest option for a private admin tool.
 
 ---
 
@@ -155,7 +159,7 @@ Then configure:
 
 Leave this **ON** if Discord refuses to save the install settings when it is disabled.
 
-This does not make the bot publicly listed.
+This does not automatically publish the bot in a public bot listing for practical purposes here.
 
 ## Privileged Gateway Intents
 
@@ -183,7 +187,7 @@ Click:
 
 `Authorize`
 
-The bot will now appear in your server’s member list.
+The bot should now appear in your server’s member list.
 
 ---
 
@@ -236,152 +240,128 @@ Launch:
 
 Enter:
 
-- Bot Token
-- Server ID
-- Save Directory
+- **Bot Token**
+Paste the bot token from the Discord Developer Portal.
+- **Server ID**
+Paste the numeric server ID copied from Discord with Developer Mode enabled.
+- **Save Folder**
+Choose where exported Excel files should go. The default is your **Downloads** folder when available.
 
 Then click:
 
-`Validate`
+`Validate Bot Access`
+Checks that:
+
+- the token is valid
+- the bot can access the target server
+- the server ID is valid
+- roles can be retrieved
 
 If validation succeeds you can:
 
-- Load Roles
-- Export Member List
-- Export Role List
+- **Load Roles**
+Loads the list of roles from the validated server so you can export only one role if desired.
+- **Generate Memberlist**
+Exports all non-bot members to an `.xlsx` file.
+- **Generate Role List**
+Exports only members who have the selected role.
 
----
 
-# Export Output
+### Save Settings
+Saves current app preferences locally.
 
-Exports are saved as CSV files.
-
-Example:
-
-- `MyServer_memberlist.csv`
-- `MyServer_Moderatorlist.csv`
-
-These files can be opened in:
-
-- Excel
-- Google Sheets
-- LibreOffice
-- Notepad
-
----
-
-# Detailed Notes on the Discord Developer Portal
-
-You may see several fields in the Developer Portal that are not needed for this tool.
-
-## Client ID
-
-The Client ID is the public identifier for your application.
-
-It is not a password.
-
-## Client Secret
-
-The Client Secret is used for OAuth login and token exchange flows.
-
-QuickUserlistExport does not use it.
-
-## Redirect URI
-
-Redirect URIs are used when Discord sends a user back to your application after an OAuth login.
-
-QuickUserlistExport does not use browser login, so you do not need this.
-
-## OAuth2 URL Generator
-
-You do not need to use the OAuth2 URL Generator for this tool.
-
-Use the **Installation** page and the **Discord Provided Link** instead.
-
----
-
-# Recommended Developer Portal Settings Summary
-
-Use these exact settings unless you have a specific reason not to:
-
-## Installation Page
-
-- Installation Contexts: `Guild Install`
-- Install Link: `Discord Provided Link`
-
-## Default Install Settings → Guild Install
-
-- `applications.commands`
-- `bot`
-
-## Bot Permissions
-
-- `Administrator`
-
-## Bot Page
-
-- Public Bot: `On` if needed to save/install with the default link
-- Server Members Intent: `On`
+### Open README
+Opens this README file from the same folder as the program.
 
 ---
 
 # Troubleshooting
 
-## Bot Does Not Appear to Be Installed
+## The bot could not access the server
+
+This usually means one of these is true:
+
+- the bot is not installed in that server
+- the server ID is wrong
+- the token belongs to a different bot
+- the token is invalid
 
 Check:
 
 1. The bot was installed using the install link
-2. You selected the correct server
+2. You selected the correct server during installation
 3. The server ID entered into the program is correct
 4. The token belongs to the same bot application
 
-## Export Fails or Returns No Members
+---
+
+## Validation works, but export fails
 
 Check:
 
-1. Server Members Intent is enabled
+1. **Server Members Intent** is enabled
 2. You clicked **Save Changes** after enabling it
 3. The bot is installed in the server
 4. The token has not been reset since installation
 
-## Token Does Not Work
+---
 
-If the token fails validation:
+## Roles do not load
 
-1. Reset the token on the **Bot** page
-2. Copy the new token
-3. Paste it into the program again
+Possible causes:
 
-## Validation Fails Even Though the Token Looks Correct
+- wrong Server ID
+- wrong bot token
+- bot not installed in that server
+- Discord API/network problem
+
+---
+
+## Token looks right, but it still fails
 
 Check:
 
-1. The bot is installed in the target server
-2. The server ID is correct
-3. The token belongs to the installed bot
-4. Server Members Intent is enabled
-5. You are not accidentally using the Client ID instead of the bot token
+1. You copied the **bot token**, not the Client ID
+2. The token was not reset after you copied it
+3. The token belongs to the bot installed in the server
 
-## I Am Confused by OAuth2 / Redirects
+---
 
-You can safely ignore these for this tool:
+## I am confused by OAuth2 / Redirects
 
+You may see these fields in the Developer Portal:
+
+- Client ID
 - Client Secret
 - Redirect URI
 - OAuth2 URL Generator
 
-They are not part of the normal setup for QuickUserlistExport.
+These are **not needed** for normal use of QuickUserlistExport.
 
-## Discord Won’t Let Me Save When Public Bot Is Off
+Use the **Installation** page and the **Discord Provided Link** instead.
 
-If Discord gives an error like:
+---
 
-`Private application cannot have a default authorization link`
+## Export file opens with strange formatting
 
-then leave **Public Bot** turned **on**.
+The current version exports directly to `.xlsx`, so names with tabs/newlines should no longer break columns the way text-delimited exports can.
 
-That does not automatically make the bot publicly discoverable in any practical sense for this tool.
+If a spreadsheet still looks wrong:
+
+1. confirm the file actually ends in `.xlsx`
+2. confirm your spreadsheet program fully supports Excel workbooks
+3. try opening the same file in Excel or LibreOffice Calc
+
+---
+
+## Dark mode looks wrong after editing the code
+
+Check that:
+
+1. `self.apply_theme()` is called during startup
+2. the donation label is a `tk.Label`
+3. the donation label is styled directly inside `apply_theme()`
+4. there are no leftover references to a removed `self.footer`
 
 ---
 
@@ -399,37 +379,9 @@ Anyone with the bot token can act as that bot.
 
 ---
 
-# Building the Program Yourself
+# Packaging Into an EXE
 
 If you are compiling the Python source, build the EXE with:
 
-`pyinstaller --noconfirm --clean --onefile --windowed --icon="youricon.ico" --name="QuickUserlistExport" --add-data="QUE Readme.md;." QuickUserlistExport.py`
-
-This creates:
-
-`QuickUserlistExport.exe`
-
-The README will automatically be written next to the EXE on first run.
-
----
-
-# File Naming and Save Behavior
-
-The program allows you to choose a save folder.
-
-By default, it should point to your Downloads folder when available.
-
-Export names use the server’s public name:
-
-- `ServerName_memberlist.csv`
-- `ServerName_RoleNamelist.csv`
-
-If a role is selected, the role export uses the role name in the filename.
-
----
-
-# Notes
-
-This tool is intended for administrators exporting member data from servers they control.
-
-Always follow Discord’s terms of service and respect server privacy policies when exporting data.
+```bash
+pyinstaller --noconfirm --clean --onefile --windowed --icon="QUEicon.ico" --name="QuickUserlistExport" --add-data="QUE Readme.md;." QuickUserlistExport.py
